@@ -2,7 +2,7 @@ package controllers
 
 import "github.com/gin-gonic/gin"
 
-func AddToCart() gin.Handler {
+func AddToCart() gin.HandlerFunc {
 	
 }
 
@@ -19,5 +19,5 @@ func BuyFromCart() gin.HandlerFunc{
 }
 
 func InstantBuy() gin.HandlerFunc{
-	
+
 }
