@@ -2,11 +2,14 @@ package controllers
 
 import (
 	"context"
+	"go/token"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jxtsly111/ecommerce-yt/models"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func HashPassword(password string) string{
@@ -58,6 +61,19 @@ func Signup() gin.HandlerFunc{
 			c.JSON(http.StatusBadRequest, gin.H{"error":"this phone no. is already in use"})
 			return
 		}
+		password := HashPassword(*user.Password)
+		user.Password = &password
+
+		user.Created_At, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		user.Updated_At, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		user.ID = primitive.NewObjectID()
+		user.User_ID = user.ID.Hex()
+		token, refreshtoken, _ := generate.TokenGenerator(*user.Email, *user.First_Name, *user.Last_Name, user.User_ID)
+		user.Token = &token
+		user.Refresh_Token = &refreshtoken
+		user.UserCart = make([]models.ProductUser, 0)
+		user.Address_Details = make([]models.Address, 0)
+		user.Order_Status = make([]models.Order, 0)
 	}
 }
 
