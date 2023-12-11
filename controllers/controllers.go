@@ -3,7 +3,6 @@ package controllers
 import (
 	"context"
 	"fmt"
-	"go/token"
 	"log"
 	"net/http"
 	"time"
@@ -29,7 +28,7 @@ func Signup() gin.HandlerFunc{
 
 		var user models.User
 		if err := c.BindJSON(&user); err!= nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON{http.StatusBadRequest, gin.H{"error": err.Error()}}
 			return
 		}
 
