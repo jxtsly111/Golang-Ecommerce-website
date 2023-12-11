@@ -1,6 +1,10 @@
 package controllers
 
 import (
+	"errors"
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -17,8 +21,16 @@ import (
 		}
 	}
 
-func AddToCart() gin.HandlerFunc {
-	
+func (app *Application) AddToCart() gin.HandlerFunc {
+	return func(c *gin.Context){
+		productQueryID := c.Query("id")
+		if productQueryID == "" {
+			log.Println("product id is empty")
+
+			_ = c.AbortWithError(http.StatusBadRequest, errors.New("product id is empty"))
+			return
+		}
+	}
 }
 
 func RemoteItem() gin.HandlerFunc {
