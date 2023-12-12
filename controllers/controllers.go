@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"log"
@@ -8,13 +9,25 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/jxtsly111/ecommerce-yt/database"
 	"github.com/jxtsly111/ecommerce-yt/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
+ var UserCollection *mongo.Collection = database.UserData(database.Client, "Users")
+ var productCollection *mongo.Collection = database.ProductData(database.Client, "Products")
+ var validate = validator.New()
+
 
 func HashPassword(password string) string{
-	
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	if err != nil {
+		log.Panic(err)
+	}
+	return string (bytes)
 }
 
 func VerifyPassword(userPassword string, givenPassword string) (bool, string)  {
