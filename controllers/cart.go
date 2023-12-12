@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -28,6 +29,21 @@ func (app *Application) AddToCart() gin.HandlerFunc {
 			log.Println("product id is empty")
 
 			_ = c.AbortWithError(http.StatusBadRequest, errors.New("product id is empty"))
+			return
+		}
+
+		userQueryID := c.Query("userID")
+		if userQueryID == "" {
+			log.Println("user id is empty")
+			_ = c.AbortWithError(http.StatusBadRequest, errors.New("user id is empty"))
+			return
+		}
+
+		productID , err := primitive.ObjectIDFromHex(productQueryID)
+
+		if err!= nil{
+			log.Println(err)
+			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 	}
