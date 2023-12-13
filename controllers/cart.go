@@ -120,7 +120,16 @@ func GetItemFromCart() gin.HandlerFunc {
 		defer cancel()
 
 		var filledcart models.UserID
-		UserCollection.FindOne(ctx, bson.D{primitive.E{Key: "id", Value: usert_id}})
+		UserCollection.FindOne(ctx, bson.D{primitive.E{Key: "id", Value: usert_id}}).Decode(&filledcart)
+
+		if err != nil{
+			log.Println(err)
+			c.IndentedJSON(500, "not found")
+			return
+		}
+
+		filter_match := bson.D{Key:"$match", Value: bson.D{primitive.E{Key: "id", Value:usert_id}}}
+		unwind := bson.D{Key:"$unwind", Value: bson.D{primitive.E{Key: "path", Value:"$usercart"}}}
 	}
 }
 
