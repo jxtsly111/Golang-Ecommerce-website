@@ -9,6 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jxtsly111/ecommerce-yt/database"
+	"github.com/jxtsly111/ecommerce-yt/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -102,7 +104,24 @@ func (app *Application) RemoveItem() gin.HandlerFunc {
 }
 
 func GetItemFromCart() gin.HandlerFunc {
-	
+	return func (c *gin.Context)  {
+		user_id := c.Query("id")
+
+		if user_id == "" {
+			c.Header("Content-Type", "application/json")
+			c.JSON(http.StatusNotFound, gin.H{"error":"invalid id"})
+			c.Abort()
+			return 
+		}
+
+		usert_id, _ := primitive.ObjectIDFromHex(user_id)
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		var filledcart models.UserID
+		UserCollection.FindOne(ctx, bson.D{primitive.E{Key: "id", Value: usert_id}})
+	}
 }
 
 func (app *Application) BuyFromCart() gin.HandlerFunc{
