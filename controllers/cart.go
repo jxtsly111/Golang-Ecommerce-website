@@ -128,8 +128,9 @@ func GetItemFromCart() gin.HandlerFunc {
 			return
 		}
 
-		filter_match := bson.D{Key:"$match", Value: bson.D{primitive.E{Key: "id", Value:usert_id}}}
-		unwind := bson.D{Key:"$unwind", Value: bson.D{primitive.E{Key: "path", Value:"$usercart"}}}
+		filter_match := bson.D{{Key:"$match", Value: bson.D{primitive.E{Key: "id", Value:usert_id}}}}
+		unwind := bson.D{{Key:"$unwind", Value: bson.D{primitive.E{Key: "path", Value:"$usercart"}}}}
+		grouping := bson.D{{Key: "$group", Value: bson.D{primitive.E{Key: "_id", Value: "$_id"},{Key: "total", Value:bson.D{primitive.E{Key: "$sum", Value: "$usercart.price"}}}}}}
 	}
 }
 
