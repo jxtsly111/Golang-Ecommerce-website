@@ -20,6 +20,11 @@ func AddAddress() gin.HandlerFunc{
 			c.Abort()
 			return
 		}
+		address, err := ObjectIDFromHex(user_id)
+		if err != nil {
+			c.IndentedJSON(500, "Intrrnal server error")
+		}
+
 	}
 }
 
