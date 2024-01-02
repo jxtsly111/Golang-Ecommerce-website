@@ -25,6 +25,14 @@ func AddAddress() gin.HandlerFunc{
 			c.IndentedJSON(500, "Intrrnal server error")
 		}
 
+		var addresses models.Address
+		addresses.Address_id = primitive.NewObjectID()
+		if err = c.BindJSON(&addresses); err != nil {
+			c.IndentedJSON(http.StatusNotAcceptable, err.Error())
+		}
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
 	}
 }
 
