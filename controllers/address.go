@@ -51,6 +51,13 @@ func AddAddress() gin.HandlerFunc{
 		count := address_no["count"]
 		size = count.(int32)
 		}
+		if size < 2 {
+			filter := bson.D
+		}else{
+			c.IndentedJSON(400, "Not Allowed")
+		}
+		defer cancel()
+		ctx.Done()
 
 	}
 }
