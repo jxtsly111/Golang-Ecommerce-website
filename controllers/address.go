@@ -41,6 +41,11 @@ func AddAddress() gin.HandlerFunc{
 			c.IndentedJSON(500, "Internal server error ")
 		}
 
+		var addressinfo []bson.M
+		if err = pointcursor.All(ctx, &addressinfo); err != nil {
+			panic(err)
+		}
+
 	}
 }
 
