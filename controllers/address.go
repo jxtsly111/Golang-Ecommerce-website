@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -52,7 +53,12 @@ func AddAddress() gin.HandlerFunc{
 		size = count.(int32)
 		}
 		if size < 2 {
-			filter := bson.D
+			filter := bson.D{primitive.E{Key: "_id", Value:address}}
+			update := bson.D{{Key: "$push", Value: bson.D{primitive.E{Key: "address", Value: addresses}}}}
+			_, err := UserCollection.UpdateOne(ctx, filter, update)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}else{
 			c.IndentedJSON(400, "Not Allowed")
 		}
