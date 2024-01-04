@@ -46,6 +46,12 @@ func AddAddress() gin.HandlerFunc{
 			panic(err)
 		}
 
+		var size int32
+		for _, address_no := range addressinfo {
+		count := address_no["count"]
+		size = count.(int32)
+		}
+
 	}
 }
 
