@@ -94,6 +94,14 @@ func DeleteAddress() gin.HandlerFunc {
 			c.Abort()
 			return
 	}
+	usert_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.IndentedJSON(500, "Internal Server Error",)
+	}
+
+	var ctx, cancel = context.WithTimeout(context.Background(),100*time.Second)
+	defer cancel()
+	filter := bson.D{primitive.E{Key: "_id", Value: usert_id}}
 
 	addresses := make([]models.Address,0)
 	usert_id, err := primitive.ObjectIDFromHex(user_id)
