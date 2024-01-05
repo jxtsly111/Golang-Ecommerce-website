@@ -69,7 +69,15 @@ func AddAddress() gin.HandlerFunc{
 }
 
 func EditHomeAddress() gin.HandlerFunc {
-	
+	return func(ctx *gin.Context) {
+		user_id := c.Query("id")
+		if user_id == ""{
+			c.Header("Content-Type", "application/Json")
+			c.JSON(http.StatusNotFound, gin.H{"Error":"Invalid Search Index"})
+			c.Abort()
+			return
+		}
+	}
 }
 
 func EditWorkAddress() gin.HandlerFunc {
