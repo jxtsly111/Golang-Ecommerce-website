@@ -103,7 +103,24 @@ func EditHomeAddress() gin.HandlerFunc {
 
 func EditWorkAddress() gin.HandlerFunc {
 	return func(c *gin.Context){
-		
+		user_id := c.Query("id")
+		if user_id == ""{
+			c.Header("Content-Type", "application/Json")
+			c.JSON(http.StatusNotFound, gin.H{"Error":"Invalid Search Index"})
+			c.Abort()
+			return
+		}
+		usert_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.IndentedJSON(500, "Internal Server Error",)
+	}
+	var editaddress models.Address
+	if err := c.BindJSON(&editaddress); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, err.Error())
+	}
+	var ctx, cancel = context.WithTimeout(context.Background(),100*time.Second)
+	defer cancel()
+	filter := bson.D{primitive.E{Key: "_id", Value: usert_id}}
 	}
 }
 
