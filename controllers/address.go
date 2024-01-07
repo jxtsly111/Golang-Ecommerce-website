@@ -122,6 +122,14 @@ func EditWorkAddress() gin.HandlerFunc {
 	defer cancel()
 	filter := bson.D{primitive.E{Key: "_id", Value: usert_id}}
 	update := bson.D{{Key: "$set", Value:bson.D{primitive.E{Key: "address.1.house_name", Value: editaddress.House},{Key: "address.1.street_name", Value: editaddress.Street},{Key:"address.1.city_name", Value: editaddress.City},{Key: "address.1.pincode",Value: editaddress.Pincode}}}}
+	_, err = UserCollection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		c.IndentedJSON(500, "something went wrong")
+		return
+	}
+	defer cancel()
+	ctx.Done()
+	c.IndentedJSON(200, "Successfully updated the work address")
 	}
 }
 
