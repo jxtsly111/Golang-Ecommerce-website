@@ -81,7 +81,7 @@ func EditHomeAddress() gin.HandlerFunc {
 	if err != nil {
 		c.IndentedJSON(500, "Internal Server Error",)
 	}
-
+	var editaddress models.Address
 	var ctx, cancel = context.WithTimeout(context.Background(),100*time.Second)
 	defer cancel()
 	filter := bson.D{primitive.E{Key: "_id", Value: usert_id}}
