@@ -82,6 +82,9 @@ func EditHomeAddress() gin.HandlerFunc {
 		c.IndentedJSON(500, "Internal Server Error",)
 	}
 	var editaddress models.Address
+	if err := c.BindJSON(&editaddress); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, err.Error())
+	}
 	var ctx, cancel = context.WithTimeout(context.Background(),100*time.Second)
 	defer cancel()
 	filter := bson.D{primitive.E{Key: "_id", Value: usert_id}}
@@ -99,7 +102,9 @@ func EditHomeAddress() gin.HandlerFunc {
 }
 
 func EditWorkAddress() gin.HandlerFunc {
-	
+	return func(c *gin.Context){
+		
+	}
 }
 
 func DeleteAddress() gin.HandlerFunc {
